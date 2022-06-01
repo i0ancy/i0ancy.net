@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import path from "path"
 import favicon from "serve-favicon"
 import fs from "fs"
+import geoip from "geoip-lite"
 
 dotenv.config({ path: `${__dirname}/.env` })
 
@@ -16,7 +17,7 @@ const PORT = process.env.PORT || 8080
 
 app.get("/", (req: Request, res: Response) => {
     let ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress) as string
-    fs.appendFile("ip-logs.txt", `${ip}\n`, (err) => {
+    fs.appendFile("ip-logs.txt", `${ip} - ${geoip.lookup(ip)!.country}\n`, (err) => {
         if (err) return res.sendStatus(500)
         res.sendFile(path.join(__dirname, "../public/index.html"))
     })
