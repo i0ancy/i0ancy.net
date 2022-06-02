@@ -9,6 +9,9 @@ dotenv.config({ path: `${__dirname}/.env` })
 
 const app = express()
 
+// security concerns
+app.disable("x-powered-by")
+
 // favicon
 app.use(favicon(path.join(__dirname, "../public", "favicon.ico")))
 
